@@ -36,8 +36,8 @@
 
 .header__mark {
   display: block;
-  /* The logo art sits inside a 512 canvas with ~5% transparent padding, so the
-     box is slightly larger than the old full-bleed tile to keep the same weight. */
+  /* Brand raster (logo-512.png): a rounded navy tile whose corners leave a
+     little breathing room, so 40px reads at the same weight as the wordmark. */
   width: 40px;
   height: 40px;
   filter: drop-shadow(0 2px 5px rgba(8, 26, 51, 0.35));

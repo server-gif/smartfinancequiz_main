@@ -4,9 +4,9 @@
 
 .DESCRIPTION
   The default Open Graph image carries the brand: the deep-navy gradient and dot
-  grid are drawn with GDI+, while the SmartFinanceQuiz logo itself is rasterised from
-  public\favicon.svg (the single source of truth for the mark) using headless Edge,
-  so the card can never drift away from the logo used in the header.
+  grid are drawn with GDI+, while the SmartFinanceQuiz mark itself is drawn from
+  public\images\brand\logo-512.png — the very same art the header renders — so
+  the card can never drift away from the logo used in the site chrome.
 
   Run it again whenever the brand name, tagline, palette or logo changes:
 
@@ -19,7 +19,7 @@ $ErrorActionPreference = 'Stop'
 
 $root = Resolve-Path (Join-Path $PSScriptRoot '..')
 $outFile = Join-Path $root 'public\images\og\og-default.png'
-$logoSvg = Join-Path $root 'public\favicon.svg'
+$logoPng = Join-Path $root 'public\images\brand\logo-512.png'
 
 $brandName  = 'Smart'
 $brandTail  = 'FinanceQuiz'
@@ -28,101 +28,73 @@ $tagline    = 'Clear, practical money education'
 $w = 1200
 $h = 675
 
-# --- Rasterise the logo SVG (transparent 512x512 PNG) ---------------------------
-$edgeCandidates = @(
-  "$env:ProgramFiles\Microsoft\Edge\Application\msedge.exe",
-  "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe"
+if (-not (Test-Path $logoPng)) { throw "Brand mark not found at $logoPng" }
+
+# --- Draw the card ------------------------------------------------------------
+$bmp = New-Object System.Drawing.Bitmap($w, $h)
+$g = [System.Drawing.Graphics]::FromImage($bmp)
+$g.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
+$g.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+$g.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
+
+# Background: brand gradient + dot grid + soft light circles.
+$bgBrush = New-Object System.Drawing.Drawing2D.LinearGradientBrush(
+  (New-Object System.Drawing.Rectangle(0, 0, $w, $h)),
+  [System.Drawing.Color]::FromArgb(13, 27, 54),
+  [System.Drawing.Color]::FromArgb(5, 11, 23),
+  [System.Drawing.Drawing2D.LinearGradientMode]::ForwardDiagonal
 )
-$edge = $edgeCandidates | Where-Object { Test-Path $_ } | Select-Object -First 1
-if (-not $edge) {
-  throw 'Microsoft Edge was not found — it is used to rasterise favicon.svg into the OG card.'
-}
+$g.FillRectangle($bgBrush, 0, 0, $w, $h)
 
-$workDir = Join-Path $root ('.tmp-og-' + [guid]::NewGuid().ToString('N'))
-New-Item -ItemType Directory -Force -Path $workDir | Out-Null
-$logoPng = Join-Path $workDir 'logo.png'
-
-try {
-  # AbsoluteUri percent-encodes spaces in the project path, which Edge needs.
-  $logoUri = ([System.Uri]$logoSvg).AbsoluteUri
-  $edgeArgs = @(
-    '--headless=new', '--disable-gpu', '--hide-scrollbars', '--no-first-run',
-    '--window-size=512,512', '--default-background-color=00000000',
-    '--virtual-time-budget=2000',
-    "--screenshot=$logoPng",
-    $logoUri
-  )
-  # Array splatting lets PowerShell quote the screenshot path (it contains spaces).
-  # Edge writes harmless task-manager noise to stderr, which would otherwise
-  # abort under $ErrorActionPreference = 'Stop'.
-  $previousEap = $ErrorActionPreference
-  $ErrorActionPreference = 'SilentlyContinue'
-  & $edge @edgeArgs 2>&1 | Out-Null
-  $ErrorActionPreference = $previousEap
-  # msedge.exe hands off to a child process and exits, so wait for the file itself.
-  $deadline = (Get-Date).AddSeconds(15)
-  while (-not (Test-Path $logoPng) -and (Get-Date) -lt $deadline) { Start-Sleep -Milliseconds 300 }
-  if (-not (Test-Path $logoPng)) { throw "Edge did not produce $logoPng" }
-
-  # --- Draw the card ------------------------------------------------------------
-  $bmp = New-Object System.Drawing.Bitmap($w, $h)
-  $g = [System.Drawing.Graphics]::FromImage($bmp)
-  $g.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
-  $g.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
-  $g.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
-
-  # Background: brand gradient + dot grid + soft light circles.
-  $bgBrush = New-Object System.Drawing.Drawing2D.LinearGradientBrush(
-    (New-Object System.Drawing.Rectangle(0, 0, $w, $h)),
-    [System.Drawing.Color]::FromArgb(13, 27, 54),
-    [System.Drawing.Color]::FromArgb(5, 11, 23),
-    [System.Drawing.Drawing2D.LinearGradientMode]::ForwardDiagonal
-  )
-  $g.FillRectangle($bgBrush, 0, 0, $w, $h)
-
-  $dotBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(46, 147, 197, 253))
-  for ($dy = 0; $dy -lt $h; $dy += 28) {
-    for ($dx = 0; $dx -lt $w; $dx += 28) {
-      $g.FillEllipse($dotBrush, $dx, $dy, 3.2, 3.2)
-    }
+$dotBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(46, 147, 197, 253))
+for ($dy = 0; $dy -lt $h; $dy += 28) {
+  for ($dx = 0; $dx -lt $w; $dx += 28) {
+    $g.FillEllipse($dotBrush, $dx, $dy, 3.2, 3.2)
   }
-
-  $g.FillEllipse((New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(30, 147, 197, 253))), 820, -110, 440, 440)
-  $g.FillEllipse((New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(26, 99, 102, 241))), -120, 340, 520, 520)
-
-  # Logo: the SVG art has ~5.5% transparent padding, so the box is larger than the
-  # visible tile (168 * 0.89 = 150).
-  $markSize = 168
-  $markX = ($w - $markSize) / 2
-  $markY = 139
-  $logo = [System.Drawing.Image]::FromFile($logoPng)
-  $g.DrawImage($logo, [single]$markX, [single]$markY, [single]$markSize, [single]$markSize)
-  $logo.Dispose()
-
-  # Wordmark: "Smart" in white, "FinanceQuiz" in the accent cyan — joined, no space.
-  $titleFont = New-Object System.Drawing.Font('Segoe UI', 92, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
-  $nameSize = $g.MeasureString($brandName, $titleFont)
-  $tailSize = $g.MeasureString($brandTail, $titleFont)
-  $fullNameSize = $g.MeasureString($brandName + $brandTail, $titleFont)
-  # MeasureString adds one trailing-space advance; removing it keeps the wordmark joined.
-  $trailing = $nameSize.Width + $tailSize.Width - $fullNameSize.Width
-  $titleY = 340
-  $titleX = ($w - ($fullNameSize.Width - $trailing)) / 2
-
-  $g.DrawString($brandName, $titleFont, (New-Object System.Drawing.SolidBrush([System.Drawing.Color]::White)), [single]$titleX, [single]$titleY)
-  $g.DrawString($brandTail, $titleFont, (New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(34, 211, 238))), [single]($titleX + $fullNameSize.Width - $tailSize.Width), [single]$titleY)
-
-  $tagFont = New-Object System.Drawing.Font('Segoe UI', 34, [System.Drawing.FontStyle]::Regular, [System.Drawing.GraphicsUnit]::Pixel)
-  $tagBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(214, 201, 215, 232))
-  $tagSize = $g.MeasureString($tagline, $tagFont)
-  $g.DrawString($tagline, $tagFont, $tagBrush, [single](($w - $tagSize.Width) / 2 + 8), [single]($titleY + $nameSize.Height + 6))
-
-  $g.Dispose()
-  $bmp.Save($outFile, [System.Drawing.Imaging.ImageFormat]::Png)
-  $bmp.Dispose()
 }
-finally {
-  Remove-Item -LiteralPath $workDir -Recurse -Force -ErrorAction SilentlyContinue
-}
+
+$g.FillEllipse((New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(30, 147, 197, 253))), 820, -110, 440, 440)
+$g.FillEllipse((New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(26, 99, 102, 241))), -120, 340, 520, 520)
+
+# Logo. The navy tile barely separates from the navy card, so a soft pale halo is
+# painted behind it (radial falloff, brand cyan tint) to lift the mark off the
+# background without adding a solid plate of its own.
+$markSize = 168
+$markX = ($w - $markSize) / 2
+$markY = 139
+$haloPath = New-Object System.Drawing.Drawing2D.GraphicsPath
+$haloPath.AddEllipse(($markX - 58), ($markY - 44), ($markSize + 116), ($markSize + 116))
+$haloBrush = New-Object System.Drawing.Drawing2D.PathGradientBrush($haloPath)
+$haloBrush.CenterColor = [System.Drawing.Color]::FromArgb(64, 147, 197, 253)
+$haloBrush.SurroundColors = @([System.Drawing.Color]::FromArgb(0, 147, 197, 253))
+$g.FillPath($haloBrush, $haloPath)
+$haloBrush.Dispose()
+$haloPath.Dispose()
+
+$logo = [System.Drawing.Image]::FromFile($logoPng)
+$g.DrawImage($logo, [single]$markX, [single]$markY, [single]$markSize, [single]$markSize)
+$logo.Dispose()
+
+# Wordmark: "Smart" in white, "FinanceQuiz" in the accent cyan — joined, no space.
+$titleFont = New-Object System.Drawing.Font('Segoe UI', 92, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
+$nameSize = $g.MeasureString($brandName, $titleFont)
+$tailSize = $g.MeasureString($brandTail, $titleFont)
+$fullNameSize = $g.MeasureString($brandName + $brandTail, $titleFont)
+# MeasureString adds one trailing-space advance; removing it keeps the wordmark joined.
+$trailing = $nameSize.Width + $tailSize.Width - $fullNameSize.Width
+$titleY = 340
+$titleX = ($w - ($fullNameSize.Width - $trailing)) / 2
+
+$g.DrawString($brandName, $titleFont, (New-Object System.Drawing.SolidBrush([System.Drawing.Color]::White)), [single]$titleX, [single]$titleY)
+$g.DrawString($brandTail, $titleFont, (New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(34, 211, 238))), [single]($titleX + $fullNameSize.Width - $tailSize.Width), [single]$titleY)
+
+$tagFont = New-Object System.Drawing.Font('Segoe UI', 34, [System.Drawing.FontStyle]::Regular, [System.Drawing.GraphicsUnit]::Pixel)
+$tagBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(214, 201, 215, 232))
+$tagSize = $g.MeasureString($tagline, $tagFont)
+$g.DrawString($tagline, $tagFont, $tagBrush, [single](($w - $tagSize.Width) / 2 + 8), [single]($titleY + $nameSize.Height + 6))
+
+$g.Dispose()
+$bmp.Save($outFile, [System.Drawing.Imaging.ImageFormat]::Png)
+$bmp.Dispose()
 
 Write-Host "Wrote $((Resolve-Path $outFile))" -ForegroundColor Green
