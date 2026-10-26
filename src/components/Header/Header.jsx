@@ -62,7 +62,7 @@ export default function Header() {
         <Link to="/" className="header__logo" aria-label={`${SITE.name} home`} onClick={onLogoClick}>
           <Logo className="header__mark" />
           <span className="header__name">
-            Finance<span>QuizApp</span>
+            Smart<span>FinanceQuiz</span>
           </span>
         </Link>
 

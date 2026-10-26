@@ -1,9 +1,9 @@
 {
-  "name": "financequizapp",
+  "name": "smartfinancequiz",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "FinanceQuizApp — a responsive financial education publication built with React, React Router and Google Ad Manager (test units).",
+  "description": "SmartFinanceQuiz — a responsive financial education publication built with React, React Router and Google Ad Manager (test units).",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

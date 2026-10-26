@@ -3,10 +3,10 @@
   Downloads the 14 article photographs into public\images\photos\.
 
 .DESCRIPTION
-  FinanceQuizApp article images are real photographs used under the Pexels Licence:
-  free for commercial use, no attribution required (https://www.pexels.com/license/).
-  Copyright stays with each photographer, so the Terms page deliberately does not
-  describe photographs as FinanceQuizApp work.
+  SmartFinanceQuiz article images are real photographs used under the Unsplash
+  Licence: free for commercial use, no attribution required
+  (https://unsplash.com/license). Copyright stays with each photographer, so the
+  Terms page deliberately does not describe photographs as SmartFinanceQuiz work.
 
   Files are self-hosted rather than hot-linked, so a removed or renamed upstream
   file can never break the live site.
@@ -18,7 +18,7 @@
   Re-download every photo even if a valid copy already exists.
 
 .PARAMETER PicsumFallback
-  For any photo whose Pexels id no longer resolves, fetch a generic real
+  For any photo whose Unsplash id no longer resolves, fetch a generic real
   photograph from picsum.photos instead. Keeps the site photographic, but the
   picture will not match the article topic, so use it only as a last resort.
 
@@ -37,23 +37,23 @@ $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $dest = Join-Path $root 'public\images\photos'
 
-# slug => Pexels photo id. This table is the single source of truth; src/data
+# slug => Unsplash file id. This table is the single source of truth; src/data
 # and src/config never name a third-party image URL themselves.
 $photos = [ordered]@{
-  'retirement-savings-roadmap'                = 7075061
-  'real-estate-vs-stocks-first-investment'    = 210617
-  'education-debt-repayment-plan'              = 6559598
-  'passive-income-streams-reality-check'      = 3861958
-  'etf-vs-mutual-fund-which-wins'            = 7943016
-  'emi-structures-smart-borrowing'            = 4978884
-  'freelancer-irregular-income-playbook'      = 3861972
-  'cryptocurrency-explained-simply'           = 28906033
-  'recession-proofing-your-household'         = 590020
-  'health-insurance-right-coverage'           = 4075769
-  'online-payment-security-essentials'        = 28841475
-  'fixed-income-options-compared'             = 7664577
-  'estate-planning-starting-early'            = 8290404
-  'gig-economy-tax-and-growth'                = 4392042
+  'emergency-fund-size-guide'                 = 'photo-1523772721666-22ad3c3b6f90'
+  'compounding-quiet-engine'                  = 'photo-1518281361980-b26bfd556770'
+  'monthly-vs-lump-sum-investing'             = 'photo-1633526543814-9718c8922b7a'
+  'idle-cash-and-inflation'                   = 'photo-1604719312566-8912e9227c6a'
+  'gold-property-cash-compared'               = 'photo-1610375461246-83df859d849d'
+  'money-biases-that-cost-you'                = 'photo-1553729459-efe14ef6055d'
+  'budget-rule-that-survives'                 = 'photo-1484480974693-6ca0a78fb36b'
+  'year-end-tax-checklist'                    = 'photo-1772588627757-32365608b421'
+  'hidden-bank-charges'                       = 'photo-1556742031-c6961e8560b0'
+  'what-moves-your-credit-score'              = 'photo-1554224155-8d04cb21cd6c'
+  'pricing-your-side-business'                = 'photo-1664575602276-acd073f104c1'
+  'salary-negotiation-returns'                = 'photo-1600880292203-757bb62b4baf'
+  'retirement-income-paycheck'                = 'photo-1658632302217-984d432b4d38'
+  'sinking-funds-planned-costs'               = 'photo-1538388933536-31c33d2703a0'
 }
 
 New-Item -ItemType Directory -Force -Path $dest | Out-Null
@@ -79,7 +79,7 @@ foreach ($slug in $photos.Keys) {
     continue
   }
 
-  $url = "https://images.pexels.com/photos/$id/pexels-photo-$id.jpeg?auto=compress&cs=tinysrgb&w=1200"
+  $url = "https://images.unsplash.com/$id?fm=jpg&q=80&w=1200&h=675&fit=crop"
 
   try {
     Invoke-WebRequest -Uri $url -OutFile $out -UseBasicParsing -TimeoutSec 60
@@ -99,7 +99,7 @@ foreach ($slug in $photos.Keys) {
   }
 
   if (Test-ValidJpeg $out) {
-    Write-Host "OK    $slug  <-  pexels/$id" -ForegroundColor Green
+    Write-Host "OK    $slug  <-  unsplash/$id" -ForegroundColor Green
     $ok++
   } else {
     $failed += $slug
@@ -110,7 +110,7 @@ Write-Host ''
 Write-Host "Downloaded: $ok   Skipped: $skipped   Missing: $($failed.Count)" -ForegroundColor Cyan
 
 if ($failed.Count -gt 0) {
-  Write-Host 'These articles have no photo yet. Pick any free image on pexels.com and' -ForegroundColor Yellow
+  Write-Host 'These articles have no photo yet. Pick any free image on unsplash.com and' -ForegroundColor Yellow
   Write-Host "save it as public\images\photos\<slug>.jpg, or re-run with -PicsumFallback:" -ForegroundColor Yellow
   $failed | ForEach-Object { Write-Host "  $_" -ForegroundColor Yellow }
   Write-Host 'Until then each article shows its own illustration as a fallback.' -ForegroundColor Yellow

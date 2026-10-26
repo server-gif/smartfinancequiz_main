@@ -3,8 +3,8 @@
   Renders public\images\og\og-default.png (1200x675 social preview card).
 
 .DESCRIPTION
-  The default Open Graph image carries the brand: the deep-green gradient and dot
-  grid are drawn with GDI+, while the FinanceQuizApp logo itself is rasterised from
+  The default Open Graph image carries the brand: the deep-navy gradient and dot
+  grid are drawn with GDI+, while the SmartFinanceQuiz logo itself is rasterised from
   public\favicon.svg (the single source of truth for the mark) using headless Edge,
   so the card can never drift away from the logo used in the header.
 
@@ -21,8 +21,8 @@ $root = Resolve-Path (Join-Path $PSScriptRoot '..')
 $outFile = Join-Path $root 'public\images\og\og-default.png'
 $logoSvg = Join-Path $root 'public\favicon.svg'
 
-$brandName  = 'Finance'
-$brandTail  = 'QuizApp'
+$brandName  = 'Smart'
+$brandTail  = 'FinanceQuiz'
 $tagline    = 'Clear, practical money education'
 
 $w = 1200
@@ -74,21 +74,21 @@ try {
   # Background: brand gradient + dot grid + soft light circles.
   $bgBrush = New-Object System.Drawing.Drawing2D.LinearGradientBrush(
     (New-Object System.Drawing.Rectangle(0, 0, $w, $h)),
-    [System.Drawing.Color]::FromArgb(46, 125, 91),
-    [System.Drawing.Color]::FromArgb(11, 31, 26),
+    [System.Drawing.Color]::FromArgb(13, 27, 54),
+    [System.Drawing.Color]::FromArgb(5, 11, 23),
     [System.Drawing.Drawing2D.LinearGradientMode]::ForwardDiagonal
   )
   $g.FillRectangle($bgBrush, 0, 0, $w, $h)
 
-  $dotBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(46, 255, 255, 255))
+  $dotBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(46, 147, 197, 253))
   for ($dy = 0; $dy -lt $h; $dy += 28) {
     for ($dx = 0; $dx -lt $w; $dx += 28) {
       $g.FillEllipse($dotBrush, $dx, $dy, 3.2, 3.2)
     }
   }
 
-  $g.FillEllipse((New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(18, 255, 255, 255))), 820, -110, 440, 440)
-  $g.FillEllipse((New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(15, 255, 255, 255))), -120, 340, 520, 520)
+  $g.FillEllipse((New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(30, 147, 197, 253))), 820, -110, 440, 440)
+  $g.FillEllipse((New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(26, 99, 102, 241))), -120, 340, 520, 520)
 
   # Logo: the SVG art has ~5.5% transparent padding, so the box is larger than the
   # visible tile (168 * 0.89 = 150).
@@ -99,7 +99,7 @@ try {
   $g.DrawImage($logo, [single]$markX, [single]$markY, [single]$markSize, [single]$markSize)
   $logo.Dispose()
 
-  # Wordmark: "Finance" in white, "QuizApp" in the accent mint — joined, no space.
+  # Wordmark: "Smart" in white, "FinanceQuiz" in the accent cyan — joined, no space.
   $titleFont = New-Object System.Drawing.Font('Segoe UI', 92, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
   $nameSize = $g.MeasureString($brandName, $titleFont)
   $tailSize = $g.MeasureString($brandTail, $titleFont)
@@ -110,10 +110,10 @@ try {
   $titleX = ($w - ($fullNameSize.Width - $trailing)) / 2
 
   $g.DrawString($brandName, $titleFont, (New-Object System.Drawing.SolidBrush([System.Drawing.Color]::White)), [single]$titleX, [single]$titleY)
-  $g.DrawString($brandTail, $titleFont, (New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(131, 212, 171))), [single]($titleX + $fullNameSize.Width - $tailSize.Width), [single]$titleY)
+  $g.DrawString($brandTail, $titleFont, (New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(34, 211, 238))), [single]($titleX + $fullNameSize.Width - $tailSize.Width), [single]$titleY)
 
   $tagFont = New-Object System.Drawing.Font('Segoe UI', 34, [System.Drawing.FontStyle]::Regular, [System.Drawing.GraphicsUnit]::Pixel)
-  $tagBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(214, 180, 194, 188))
+  $tagBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(214, 201, 215, 232))
   $tagSize = $g.MeasureString($tagline, $tagFont)
   $g.DrawString($tagline, $tagFont, $tagBrush, [single](($w - $tagSize.Width) / 2 + 8), [single]($titleY + $nameSize.Height + 6))
 

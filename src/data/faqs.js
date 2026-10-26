@@ -30,8 +30,8 @@ export const FAQS = [
       'A rough rule is sum insured equal to 10–15 times your annual income, or enough to cover a major hospitalisation in your city plus 12 months of recovery. Factor in rising medical inflation (10–14% annually in many markets), family dependants and whether your employer group plan is sufficient or disappears upon job change.',
   },
   {
-    question: 'Does FinanceQuizApp give investment advice?',
+    question: 'Does SmartFinanceQuiz give investment advice?',
     answer:
-      'No. Every article on FinanceQuizApp is for general education only and is not personalised financial, tax or investment advice. Markets involve risk, and rules differ by country and situation. Before acting on anything you read here, consider consulting a qualified financial professional about your own circumstances.',
+      'No. Every article on SmartFinanceQuiz is for general education only and is not personalised financial, tax or investment advice. Markets involve risk, and rules differ by country and situation. Before acting on anything you read here, consider consulting a qualified financial professional about your own circumstances.',
   },
 ];

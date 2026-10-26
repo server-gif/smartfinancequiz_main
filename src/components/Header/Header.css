@@ -40,7 +40,11 @@
      box is slightly larger than the old full-bleed tile to keep the same weight. */
   width: 40px;
   height: 40px;
-  filter: drop-shadow(0 2px 5px rgba(0, 63, 52, 0.3));
+  filter: drop-shadow(0 2px 5px rgba(8, 26, 51, 0.35));
+}
+
+html[data-theme='dark'] .header__mark {
+  filter: drop-shadow(0 2px 6px rgba(34, 211, 238, 0.28));
 }
 
 .header__name {
@@ -53,6 +57,13 @@
 
 .header__name span {
   color: var(--color-brand);
+}
+
+/* The longer wordmark needs a touch more room on small phones. */
+@media (max-width: 400px) {
+  .header__name {
+    font-size: 1.2rem;
+  }
 }
 
 .header__controls {

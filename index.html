@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0b1f1a" />
+    <meta name="theme-color" content="#070f1f" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://securepubads.g.doubleclick.net" crossorigin />
     <!-- Fonts use the native system stack (iOS SF Pro on Apple devices) — no webfont download. -->
     <!-- Title, description, canonical and Open Graph tags are rendered per page by <SEO />. -->
     <script>
-      /* Dark forest theme is the default; only an explicit "light" choice opts out. */
+      /* Dark navy theme is the default; only an explicit "light" choice opts out. */
       (function () {
         try {
           if (localStorage.getItem('ff-theme') !== 'light') {
@@ -29,7 +29,7 @@
         align-items: center;
         justify-content: center;
         gap: 26px;
-        background: #f3f9f5;
+        background: #f2f7fe;
         transition: opacity 0.4s ease, visibility 0.4s ease;
       }
       #app-splash.is-hidden {
@@ -46,21 +46,21 @@
         width: 52px;
         height: 52px;
         display: block;
-        filter: drop-shadow(0 3px 8px rgba(11, 93, 71, 0.3));
+        filter: drop-shadow(0 3px 8px rgba(29, 78, 216, 0.3));
       }
       .app-splash__name {
         font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
         font-size: 1.35rem;
         font-weight: 700;
         letter-spacing: -0.02em;
-        color: #0c2a22;
+        color: #081a33;
       }
       .app-splash__bar {
         position: relative;
         width: 130px;
         height: 3px;
         border-radius: 99px;
-        background: #d8e6de;
+        background: #d9e4f5;
         overflow: hidden;
       }
       .app-splash__bar::after {
@@ -70,7 +70,7 @@
         bottom: 0;
         width: 40%;
         border-radius: inherit;
-        background: #2e7d5b;
+        background: #1d4ed8;
         animation: app-splash-slide 1s ease-in-out infinite;
       }
       @keyframes app-splash-slide {
@@ -88,16 +88,16 @@
       }
       /* Splash follows the saved dark theme too. */
       html[data-theme='dark'] #app-splash {
-        background: #0b1f1a;
+        background: #070f1f;
       }
       html[data-theme='dark'] .app-splash__name {
         color: #ffffff;
       }
       html[data-theme='dark'] .app-splash__bar {
-        background: #1e3f34;
+        background: #1d3054;
       }
       html[data-theme='dark'] .app-splash__bar::after {
-        background: #83d4ab;
+        background: #22d3ee;
       }
     </style>
   </head>
@@ -107,37 +107,37 @@
         <svg class="app-splash__mark" viewBox="0 0 512 512" aria-hidden="true">
           <defs>
             <linearGradient id="ffSplashLogoBg" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#10C9A0"/>
-              <stop offset="0.55" stop-color="#008F70"/>
-              <stop offset="1" stop-color="#005642"/>
+              <stop offset="0" stop-color="#22D3EE"/>
+              <stop offset="0.55" stop-color="#3B82F6"/>
+              <stop offset="1" stop-color="#4F46E5"/>
             </linearGradient>
-            <linearGradient id="ffSplashLogoMint" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#B8FF9B"/>
-              <stop offset="1" stop-color="#32D889"/>
+            <linearGradient id="ffSplashLogoCyan" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#E0F2FE"/>
+              <stop offset="1" stop-color="#67E8F9"/>
             </linearGradient>
-            <linearGradient id="ffSplashLogoWhiteMint" x1="0" y1="0" x2="1" y2="1">
+            <linearGradient id="ffSplashLogoWhiteCyan" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0" stop-color="#ffffff"/>
-              <stop offset="1" stop-color="#A5FFD9"/>
+              <stop offset="1" stop-color="#BAE6FD"/>
             </linearGradient>
             <linearGradient id="ffSplashLogoGold" x1="0" y1="0" x2="0.8" y2="1">
               <stop offset="0" stop-color="#FFF66B"/>
               <stop offset="1" stop-color="#FFC928"/>
             </linearGradient>
             <filter id="ffSplashLogoShadow" x="-20%" y="-20%" width="140%" height="150%">
-              <feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#003F34" flood-opacity="0.35"/>
+              <feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#0B1B3A" flood-opacity="0.35"/>
             </filter>
           </defs>
           <rect x="28" y="28" width="456" height="456" rx="76" fill="url(#ffSplashLogoBg)"/>
           <g filter="url(#ffSplashLogoShadow)">
-            <path d="M153 367V192c0-58 39-97 98-97h111c-15 31-39 47-77 47h-52c-28 0-43 17-43 43v24h108c-13 27-34 42-67 42h-41v116c0 28-15 43-43 43-27 0-43-15-43-43Z" fill="url(#ffSplashLogoMint)"/>
-            <path d="M153 209c0-31 15-52 43-66 15-8 34-11 56-11h110c-15 30-39 46-77 46h-52c-28 0-43 17-43 43v20h-37Z" fill="#53E8A2" opacity="0.92"/>
-            <path d="M153 367V258h37v109c0 28-15 43-43 43-12 0-22-3-29-10 22-2 35-13 35-33Z" fill="url(#ffSplashLogoWhiteMint)"/>
-            <rect x="221" y="321" width="43" height="76" rx="13" fill="url(#ffSplashLogoWhiteMint)"/>
-            <rect x="278" y="286" width="43" height="111" rx="13" fill="url(#ffSplashLogoMint)"/>
+            <path d="M153 367V192c0-58 39-97 98-97h111c-15 31-39 47-77 47h-52c-28 0-43 17-43 43v24h108c-13 27-34 42-67 42h-41v116c0 28-15 43-43 43-27 0-43-15-43-43Z" fill="url(#ffSplashLogoCyan)"/>
+            <path d="M153 209c0-31 15-52 43-66 15-8 34-11 56-11h110c-15 30-39 46-77 46h-52c-28 0-43 17-43 43v20h-37Z" fill="#A5F3FC" opacity="0.92"/>
+            <path d="M153 367V258h37v109c0 28-15 43-43 43-12 0-22-3-29-10 22-2 35-13 35-33Z" fill="url(#ffSplashLogoWhiteCyan)"/>
+            <rect x="221" y="321" width="43" height="76" rx="13" fill="url(#ffSplashLogoWhiteCyan)"/>
+            <rect x="278" y="286" width="43" height="111" rx="13" fill="url(#ffSplashLogoCyan)"/>
             <rect x="335" y="244" width="43" height="153" rx="13" fill="url(#ffSplashLogoGold)"/>
           </g>
         </svg>
-        <span class="app-splash__name">FinanceQuizApp</span>
+        <span class="app-splash__name">SmartFinanceQuiz</span>
       </div>
       <span class="app-splash__bar"></span>
     </div>

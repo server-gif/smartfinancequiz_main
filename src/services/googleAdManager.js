@@ -17,7 +17,6 @@ let loadPromise = null;
 let loadState = 'idle'; // idle | loading | ready | failed
 let servicesInitialized = false;
 const renderListeners = new Map(); // slotElementId -> callback(event)
-const closedListeners = new Map(); // slotElementId -> callback(event)
 const visibilityListeners = new Map(); // slotElementId -> callback(event)
 
 const isBrowser = () => typeof window !== 'undefined' && typeof document !== 'undefined';
@@ -41,14 +40,10 @@ function initServices(googletag) {
     if (callback) callback(event);
   });
 
-  // Fired when the reader closes a closable unit (out-of-page interstitial, sticky…).
-  pubads.addEventListener('slotClosed', (event) => {
-    const callback = closedListeners.get(event.slot.getSlotElementId());
-    if (callback) callback(event);
-  });
-
   // Fired whenever a slot's on-screen visibility changes. For a triggered
   // interstitial, inViewPercentage dropping to 0 means the reader closed it.
+  // (GPT no longer emits 'slotClosed' for out-of-page units, so this is the
+  // only close signal available.)
   pubads.addEventListener('slotVisibilityChanged', (event) => {
     const callback = visibilityListeners.get(event.slot.getSlotElementId());
     if (callback) callback(event);
@@ -121,7 +116,6 @@ export function loadGpt() {
  * Define, display and request a slot.
  * `outOfPageFormat` (e.g. 'INTERSTITIAL') defines an out-of-page slot that
  * Google renders in its own container — no div needed, sizes are ignored.
- * `onClosed` fires when the reader closes such an ad.
  * `interstitialConfig` is passed to slot.setConfig() — used to put GAM
  * interstitials into trigger mode (load in the background, show on demand
  * via handle.show()).
@@ -138,7 +132,6 @@ export function createAdSlot({
   outOfPageFormat,
   interstitialConfig,
   onRenderEnded,
-  onClosed,
   onError,
   onVisibilityChange,
 }) {
@@ -154,9 +147,6 @@ export function createAdSlot({
   const googletag = getGoogletag();
   const listener = (event) => {
     if (!handle.destroyed && onRenderEnded) onRenderEnded(event);
-  };
-  const closedListener = (event) => {
-    if (!handle.destroyed && onClosed) onClosed(event);
   };
   const visibilityListener = (event) => {
     if (!handle.destroyed && onVisibilityChange) onVisibilityChange(event);
@@ -194,7 +184,6 @@ export function createAdSlot({
       // Out-of-page slots get an auto-generated element id; use the real one.
       const slotKey = slot.getSlotElementId();
       renderListeners.set(slotKey, listener);
-      closedListeners.set(slotKey, closedListener);
       if (onVisibilityChange) visibilityListeners.set(slotKey, visibilityListener);
       handle.slot = slot;
 
@@ -224,7 +213,6 @@ export function createAdSlot({
     const { slot } = handle;
     const slotKey = slot ? slot.getSlotElementId() : divId;
     if (renderListeners.get(slotKey) === listener) renderListeners.delete(slotKey);
-    if (closedListeners.get(slotKey) === closedListener) closedListeners.delete(slotKey);
     if (visibilityListeners.get(slotKey) === visibilityListener) visibilityListeners.delete(slotKey);
     if (slot) {
       googletag.cmd.push(() => {

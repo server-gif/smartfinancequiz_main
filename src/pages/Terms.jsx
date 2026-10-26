@@ -36,8 +36,8 @@ export default function Terms() {
 
             <h2 id="copyright">Copyright and content ownership</h2>
             <p>
-              Every article, guide, headline, summary and original illustration published on {SITE.name} is
-              work we created for this site and is owned by {SITE.name}. It is protected by copyright, and
+              Every article, guide, headline and summary published on {SITE.name} is work we created for
+              this site and is owned by {SITE.name}. It is protected by copyright, and
               © {new Date().getFullYear()} {SITE.name}. No content may be republished, mirrored, translated for
               publication or reproduced in full on another website, in print, or on a social channel without
               our prior written permission.
@@ -72,7 +72,7 @@ export default function Terms() {
                 Scraping, mirroring or bulk-copying the site, including feeding our content into AI training or
                 automated content-generation systems.
               </li>
-              <li>Passing our articles or illustrations off as someone else’s work.</li>
+              <li>Passing our articles off as someone else’s work.</li>
               <li>Redistributing the licensed photographs that appear on article pages.</li>
             </ul>
             <p>
