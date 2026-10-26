@@ -16,7 +16,7 @@
 
 .blog-card__link:hover {
   transform: translateY(-3px);
-  border-color: var(--color-border-strong);
+  border-color: rgba(34, 211, 238, 0.55);
   box-shadow: var(--shadow-md);
 }
 

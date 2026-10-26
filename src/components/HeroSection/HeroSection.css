@@ -172,14 +172,14 @@
 
 .hero__btn--primary {
   color: var(--color-on-brand);
-  background: var(--color-brand-fill);
+  background: var(--grad-brand);
   border: 1.5px solid var(--color-ink);
   box-shadow: 4px 4px 0 var(--color-ink);
 }
 
 .hero__btn--primary:hover {
   color: var(--color-on-brand);
-  background: var(--color-brand-fill-hover);
+  background: var(--grad-brand-hover);
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0 var(--color-ink);
 }

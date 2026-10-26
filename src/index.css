@@ -1,25 +1,33 @@
 :root {
   /* Colour — navy / cyan palette (matches the SmartFinanceQuiz quiz app) */
-  --color-bg: #f2f7fe;
-  --color-bg-soft: #e6eefb;
+  --color-bg: #eef6ff;
+  --color-bg-soft: #e2f1fe;
   --color-surface: #ffffff;
   --color-ink: #081a33;
   --color-body: #33445e;
   --color-muted: #64748b;
-  --color-border: #d9e4f5;
-  --color-border-strong: #bccfe9;
+  --color-border: #d3e6fb;
+  --color-border-strong: #b3d4f6;
   --color-brand: #0e7490;
   --color-brand-dark: #155e75;
-  --color-brand-soft: #e0f4fb;
-  /* Filled buttons keep the solid brand fill in both themes. */
-  --color-brand-fill: #1d4ed8;
-  --color-brand-fill-hover: #3b82f6;
-  --color-on-brand: #ffffff;
+  --color-brand-soft: #dcf5fe;
+  /* Filled buttons use the quiz app's cyan gradient in both themes. */
+  --color-brand-fill: #22d3ee;
+  --color-brand-fill-hover: #67e8f9;
+  --color-on-brand: #06212e;
   --color-accent: #6366f1;
 
+  /* Cyan / sky / indigo accents lifted from the quiz app */
+  --color-cyan: #22d3ee;
+  --color-cyan-soft: #67e8f9;
+  --color-sky: #38bdf8;
+  --color-indigo: #6366f1;
+  --grad-brand: linear-gradient(45deg, #22d3ee 0%, #67e8f9 100%);
+  --grad-brand-hover: linear-gradient(45deg, #67e8f9 0%, #22d3ee 100%);
+
   /* Component-specific surfaces */
-  --header-glass: rgba(255, 255, 255, 0.88);
-  --color-skeleton: #e6eefb;
+  --header-glass: rgba(240, 250, 255, 0.9);
+  --color-skeleton: #e2f1fe;
 
   /* Type — iOS system font stack (SF Pro / San Francisco on Apple devices) */
   --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', 'Segoe UI', system-ui, Roboto, sans-serif;
@@ -93,9 +101,9 @@ body {
   overflow-x: hidden;
   background-color: var(--color-bg);
   background-image:
-    radial-gradient(ellipse 70% 50% at 50% -10%, rgba(56, 189, 248, 0.16) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 0% 30%, rgba(99, 102, 241, 0.09) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 100% 80%, rgba(34, 211, 238, 0.08) 0%, transparent 60%);
+    radial-gradient(ellipse 75% 55% at 50% -10%, rgba(34, 211, 238, 0.30) 0%, transparent 62%),
+    radial-gradient(ellipse 65% 45% at 0% 28%, rgba(99, 102, 241, 0.16) 0%, transparent 60%),
+    radial-gradient(ellipse 65% 45% at 100% 78%, rgba(56, 189, 248, 0.26) 0%, transparent 62%);
   background-repeat: no-repeat;
   background-attachment: fixed;
   color: var(--color-body);
@@ -209,12 +217,12 @@ button {
 }
 
 .btn--primary {
-  background: var(--color-brand-fill);
+  background: var(--grad-brand);
   color: var(--color-on-brand);
 }
 
 .btn--primary:hover {
-  background: var(--color-brand-fill-hover);
+  background: var(--grad-brand-hover);
 }
 
 .btn--ghost {
